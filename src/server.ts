@@ -4,18 +4,38 @@ import "express-async-errors";
 import cors from "cors";
 
 import handleErrors from "./Middlewares/errorHandler.js";
-import router from "./Routers/routers.js";
+import UsersRoute from "./Routers/users.route.js";
 
-dotenv.config();
-const app = express();
+class Server {
+  private app: express.Application;
+  private port: number;
 
-app.use(cors());
-app.use(express.json());
+  constructor(port: number) {
+    dotenv.config();
+    this.port = port;
+    this.app = express();
+    this.useMiddlewares();
+    this.useRouters();
+  }
 
-app.use(router)
-app.use(handleErrors);
+  private useMiddlewares() {
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(handleErrors);
+    console.log("Middlewares");
+  }
 
-const port = +process.env.PORT || 4000;
-app.listen(port,() => {
-    console.log(`server is listening on port ${port}`)
-});
+  private useRouters() {
+    const { router } = new UsersRoute();
+    this.app.use(router);
+    console.log("Router");
+  }
+
+  public initialize() {
+    this.app.listen(this.port, () => {
+      console.log(`server is listening on port ${this.port}`);
+    });
+  }
+}
+
+export default Server;

@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import { stripHtml } from "string-strip-html";
-import { unprocessableEntityError } from "./errorHandler.js";
 
-export default function validSchema(schema) {
-  return async (req:Request, res:Response, next:NextFunction) => {
+const validSchema = (schema: any) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const schemaBody:object = {};
-      const body:Object = req.body
+      const schemaBody: object = {};
+      const body: Object = req.body;
 
       for (const key in body) {
-        if(typeof schemaBody[key] === "string"){
+        if (typeof schemaBody[key] === "string") {
           schemaBody[key] = stripHtml(req.body[key]).result.trim();
         } else {
           schemaBody[key] = req.body[key];
@@ -22,10 +21,13 @@ export default function validSchema(schema) {
 
       res.locals.body = validation;
     } catch (error) {
-      console.log(error);
-      throw unprocessableEntityError(error.message);
+      error.status = 422;
+      error.message = "unprocessable entity";
+      throw error;
     }
 
     next();
   };
-}
+};
+
+export default validSchema;
