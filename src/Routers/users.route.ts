@@ -1,8 +1,12 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+import UsersController from "../Controllers/users.controller.js";
+import validSchema from "../Middlewares/validateSchema.js";
+import userSchema from "../Schemas/users.schema.js";
 
 class UsersRoute {
   public router: Router;
   public url: string;
+  private controller = new UsersController();
 
   constructor() {
     this.router = Router();
@@ -11,12 +15,8 @@ class UsersRoute {
   }
 
   private initialize() {
-    this.router.post(this.url, (req: Request, res: Response) => {
-      res.send("callback");
-    });
-    this.router.get(this.url, (req: Request, res: Response) => {
-      res.send("callback");
-    });
+    this.router.post(this.url, validSchema(userSchema), this.controller.postUser);
+    this.router.get(this.url, this.controller.getUser);
   }
 }
 

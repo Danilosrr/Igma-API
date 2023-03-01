@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { stripHtml } from "string-strip-html";
+import { CustomError } from "./errorHandler.js";
 
 const validSchema = (schema: any) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -21,9 +22,8 @@ const validSchema = (schema: any) => {
 
       res.locals.body = validation;
     } catch (error) {
-      error.status = 422;
-      error.message = "unprocessable entity";
-      throw error;
+      console.log(error)
+      throw new CustomError("unprocessable entity", 422);
     }
 
     next();
