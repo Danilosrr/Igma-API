@@ -5,10 +5,11 @@
   "type": "module",
   "main": "src/app.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && prisma migrate deploy",
     "start": "node dist/src/app.js",
     "dev": "nodemon src/app.ts",
-    "test:integration": "dotenv -e .env.example prisma db push && NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.example jest -i -- --coverage --testPathPattern=tests/integration"
+    "prisma:deploy": "prisma db push",
+    "test:integration": "dotenv -e .env.test prisma db push && NODE_OPTIONS=--experimental-vm-modules dotenv -e .env.test jest -i -- --coverage --testPathPattern=tests/integration"
   },
   "keywords": [],
   "author": "",
