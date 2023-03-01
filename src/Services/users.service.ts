@@ -13,7 +13,10 @@ class UsersService {
 
   public queryUser = async (cpf: string) => {
     cpf = cpf.replace(/\D/g, "");
-    return await this.repository.queryUser(cpf);
+
+    const query = await this.repository.queryUser(cpf);
+    if (!!query) return query;
+    else throw new CustomError("cpf not found", 404);
   };
 
   public allUsers = async (page?: number) => {
@@ -33,7 +36,7 @@ class UsersService {
   private verifyDigit = (cpf: string, digit: 1 | 2) => {
     const limit = digit == 1 ? 9 : 10;
     const multiplier = digit == 1 ? 10 : 11;
-    
+
     if (cpf.length != 11) throw new CustomError("invalid cpf format", 422);
 
     let sum = 0;

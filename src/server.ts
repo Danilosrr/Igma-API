@@ -32,7 +32,7 @@ class Server {
   }
 
   public initialize() {
-    this.app.listen(this.port, () => {
+    return this.app.listen(this.port, () => {
       console.log(`server is listening on port ${this.port}`);
     });
   }
