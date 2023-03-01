@@ -1,5 +1,5 @@
 import Server from "./server.js";
 
-const server = new Server(+process.env.PORT || 4000);
+const server = new Server(+process.env.PORT);
 
 export const app = server.initialize();

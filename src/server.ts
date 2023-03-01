@@ -5,6 +5,7 @@ import cors from "cors";
 
 import handleErrors from "./Middlewares/errorHandler.js";
 import UsersRoute from "./Routers/users.route.js";
+import DocRoute from "./Routers/doc.route.js";
 
 class Server {
   private app: express.Application;
@@ -26,8 +27,12 @@ class Server {
   }
 
   private useRouters() {
-    const { router } = new UsersRoute();
-    this.app.use(router);
+    const users = new UsersRoute();
+    this.app.use(users.router);
+
+    const doc = new DocRoute();
+    this.app.use(doc.router);
+
     console.log("Router");
   }
 

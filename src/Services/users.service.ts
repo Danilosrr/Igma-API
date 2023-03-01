@@ -7,14 +7,15 @@ class UsersService {
 
   public createUser = async (data: UserData) => {
     const cpf = this.verifyCpf(data.cpf);
-
-    return await this.repository.createUser({ ...data, cpf });
+    const user = await this.repository.createUser({ ...data, cpf });
+    delete user.id;
+    return user;
   };
 
   public queryUser = async (cpf: string) => {
     cpf = cpf.replace(/\D/g, "");
 
-    const query = await this.repository.queryUser(cpf);
+    const query: UserData = await this.repository.queryUser(cpf);
     if (!!query) return query;
     else throw new CustomError("cpf not found", 404);
   };

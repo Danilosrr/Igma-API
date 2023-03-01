@@ -9,12 +9,12 @@ class UsersController {
       const { cpf, page } = req.query;
       
       if (cpf) {
-        const user = await this.service.queryUser(cpf as string);
+        const user: UserData = await this.service.queryUser(cpf as string);
         console.log("cpf query")
         res.status(200).send(user);
       }
       else {
-        const allUsers = await this.service.allUsers(+page);
+        const allUsers: UserData[] = await this.service.allUsers(+page);
         console.log("normal query")
         res.status(200).send(allUsers);
       }
@@ -23,7 +23,7 @@ class UsersController {
     public postUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       const data: UserData = req.body;
 
-      const user = await this.service.createUser(data);
+      const user: UserData  = await this.service.createUser(data);
       res.status(201).send(user);
     }
 }

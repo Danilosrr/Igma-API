@@ -7,13 +7,17 @@ class UsersRepository {
   }
 
   public async queryUser(cpf: string) {
-    return await prisma.users.findUnique({ where: { cpf } });
+    return await prisma.users.findUnique({
+      where: { cpf },
+      select: { id: false, name: true, cpf: true, birthdate: true },
+    });
   }
 
   public async allUsers(page: number, resultsPerPage: number) {
     return await prisma.users.findMany({
       skip: resultsPerPage * page,
       take: resultsPerPage,
+      select: { id: false, name: true, cpf: true, birthdate: true },
     });
   }
 }
